@@ -2,71 +2,93 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>STANDOFF GOLD</title>
+<title>GOLD TAP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
 <style>
 *{ -webkit-tap-highlight-color:transparent }
 body{
   margin:0;
-  background:radial-gradient(circle at top,#0b0f1a 0%,#05070f 70%);
+  background:#000;
   font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
   color:#fff;
+  overflow:hidden;
 }
-.screen{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px;
-}
+
 .app{
   height:100vh;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  padding:16px;
-}
-.top{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
+  flex-direction:column;
 }
-.lang span{
-  margin-left:8px;
-  cursor:pointer;
+
+/* TOP */
+.top{
+  padding:16px;
+  text-align:center;
+}
+.balance{
+  font-size:34px;
+  font-weight:900;
+}
+.unit{
+  font-size:13px;
   opacity:.6;
 }
-.lang .active{opacity:1;font-weight:700}
-.title{
-  font-weight:900;
-  letter-spacing:2px;
-  color:#ffd36a;
-}
-.gold{
-  color:#ffd36a;
-  font-size:26px;
-  font-weight:900;
-}
+
+/* CENTER */
 .center{
+  flex:1;
   display:flex;
   align-items:center;
   justify-content:center;
   position:relative;
 }
-.core{
-  width:220px;height:220px;border-radius:18px;
-  background:radial-gradient(circle at 30% 30%,#ffd36a,#c9a132 70%);
-  box-shadow:0 0 30px rgba(255,211,106,.55);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:900;color:#2b1c00;
-  cursor:pointer;user-select:none;
+
+/* ORB */
+.orb-wrap{
+  position:relative;
 }
-.core:active{transform:scale(.95)}
+.orb-glow{
+  position:absolute;
+  inset:-50px;
+  background:radial-gradient(circle, rgba(255,255,255,.35), transparent 65%);
+  filter:blur(22px);
+  animation:pulseGlow 3s infinite ease-in-out;
+}
+@keyframes pulseGlow{
+  0%{opacity:.4}
+  50%{opacity:.8}
+  100%{opacity:.4}
+}
+
+.orb{
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:46px;
+  font-weight:900;
+  cursor:pointer;
+  user-select:none;
+  box-shadow:
+    0 0 60px rgba(255,255,255,.35),
+    inset 0 0 30px rgba(255,255,255,.15);
+  animation:pulseOrb 3s infinite ease-in-out;
+}
+@keyframes pulseOrb{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+.orb:active{ transform:scale(.96) }
+
+/* FLOAT */
 .float{
   position:absolute;
-  font-weight:800;
+  font-weight:700;
   color:#ffd36a;
   animation:floatUp .9s ease forwards;
 }
@@ -74,278 +96,196 @@ body{
   from{transform:translateY(0);opacity:1}
   to{transform:translateY(-60px);opacity:0}
 }
+
+/* ENERGY */
+.energy{
+  padding:0 16px 12px;
+}
+.energy-bar{
+  height:8px;
+  background:#222;
+  border-radius:6px;
+  overflow:hidden;
+}
+.energy-fill{
+  height:100%;
+  background:linear-gradient(90deg,#ffd36a,#ffb700);
+}
+
+/* MENU */
+.menu{
+  display:flex;
+  border-top:1px solid #222;
+}
+.menu button{
+  flex:1;
+  background:none;
+  border:none;
+  color:#aaa;
+  padding:12px 0;
+  font-size:13px;
+  cursor:pointer;
+}
+.menu .active{
+  color:#ffd36a;
+  font-weight:700;
+}
+
+/* SCREENS */
+.screen{
+  display:none;
+  height:100%;
+}
+.screen.active{
+  display:block;
+}
+
+/* WITHDRAW */
+.withdraw{
+  padding:20px;
+  text-align:center;
+}
+input{
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  border:none;
+  margin-top:10px;
+  padding:0 12px;
+}
 .btn{
-  width:100%;height:44px;
-  border-radius:12px;border:none;
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  border:none;
   background:#ffd36a;
   color:#2b1c00;
   font-weight:900;
-  cursor:pointer;
-  margin-top:8px;
+  margin-top:12px;
 }
-.btn.secondary{
-  background:transparent;
-  border:1px solid #ffd36a;
-  color:#ffd36a;
-}
-input{
-  width:100%;height:44px;
-  border-radius:12px;border:none;
-  padding:0 12px;
-  margin-top:8px;
-}
-.card{
-  background:rgba(255,255,255,.05);
-  border-radius:14px;
-  padding:12px;
-  margin-top:10px;
-}
-.small{font-size:12px;opacity:.8}
-ul{padding-left:16px;margin:6px 0}
+.small{font-size:12px;opacity:.7}
 </style>
 </head>
 
 <body>
-<div id="app"></div>
+<div class="app">
+
+  <!-- EARN -->
+  <div class="screen active" id="earn">
+    <div class="top">
+      <div class="balance" id="balance">0</div>
+      <div class="unit">GOLD</div>
+    </div>
+
+    <div class="center" id="zone">
+      <div class="orb-wrap">
+        <div class="orb-glow"></div>
+        <div class="orb" id="orb">△</div>
+      </div>
+    </div>
+
+    <div class="energy">
+      <div class="energy-bar">
+        <div class="energy-fill" id="energyFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOSTS -->
+  <div class="screen" id="boosts">
+    <div class="withdraw">
+      <h2>BOOSTS</h2>
+      <div class="small">Скоро здесь будут бусты</div>
+    </div>
+  </div>
+
+  <!-- WITHDRAW -->
+  <div class="screen" id="withdraw">
+    <div class="withdraw">
+      <h2>Withdraw</h2>
+      <div class="small">100 TAPS = 10 GOLD</div>
+      <input id="gid" placeholder="Game ID">
+      <input id="amt" placeholder="Amount">
+      <button class="btn" onclick="doWithdraw()">Withdraw</button>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+    <button class="active" onclick="show('earn',this)">Earn</button>
+    <button onclick="show('boosts',this)">Boosts</button>
+    <button onclick="show('withdraw',this)">Withdraw</button>
+  </div>
+
+</div>
 
 <script>
 /* ===== CONFIG ===== */
-const TG_CHANNEL = 'https://t.me/+s1VSvO5kwp45OTFi';
-const DAILY_LIMIT = 1000;
-const RATE = 0.1;               // 1 tap = 0.1 G
-const MIN_WITHDRAW = 10;
-const BOOST_TIME = 30;          // сек
-const BOOST_COOLDOWN = 60;      // сек
-
-/* ===== I18N ===== */
-const TXT={
-  ru:{
-    loading:'Загрузка…',
-    name:'Введите имя',
-    save:'Сохранить',
-    tap:'Тапай и фарми Gold',
-    withdraw:'Вывод Gold',
-    amount:'Сумма вывода (G)',
-    gid:'Игровой ID',
-    rate:'Курс: 100 TAPS = 10 G',
-    limit:(a)=>`Лимит: ${a}/${DAILY_LIMIT}`,
-    boost:'BOOST x2',
-    boostOn:(s)=>`Буст активен (${s}с)`,
-    boostCd:(s)=>`КД ${s}с`,
-    lb:'Лидерборд'
-  },
-  en:{
-    loading:'Loading…',
-    name:'Enter name',
-    save:'Save',
-    tap:'Tap to farm Gold',
-    withdraw:'Withdraw Gold',
-    amount:'Withdraw amount (G)',
-    gid:'Game ID',
-    rate:'Rate: 100 TAPS = 10 G',
-    limit:(a)=>`Limit: ${a}/${DAILY_LIMIT}`,
-    boost:'BOOST x2',
-    boostOn:(s)=>`Boost active (${s}s)`,
-    boostCd:(s)=>`Cooldown ${s}s`,
-    lb:'Leaderboard'
-  }
-};
-let lang=localStorage.getItem('lang')||'ru';
+const MAX_ENERGY = 5500;
 
 /* ===== STATE ===== */
-let name=localStorage.getItem('name');
-let gold=+localStorage.getItem('gold')||0;
-let tapsToday=+localStorage.getItem('taps_today')||0;
-let day=localStorage.getItem('tap_day');
-let screen='loading';
+let gold = +localStorage.getItem('gold') || 0;
+let energy = +localStorage.getItem('energy') || MAX_ENERGY;
 
-let boost=false, boostLeft=0, boostCd=0;
+/* ===== DOM ===== */
+const balanceEl = document.getElementById('balance');
+const orb = document.getElementById('orb');
+const zone = document.getElementById('zone');
+const energyFill = document.getElementById('energyFill');
 
-/* DAILY RESET */
-const today=new Date().toDateString();
-if(day!==today){
-  tapsToday=0;
-  localStorage.setItem('tap_day',today);
-  localStorage.setItem('taps_today',0);
+function save(){
+  localStorage.setItem('gold',gold);
+  localStorage.setItem('energy',energy);
 }
-
-/* ===== ROOT ===== */
-const app=document.getElementById('app');
-
-/* ===== RENDER ===== */
 function render(){
-  const t=TXT[lang];
+  balanceEl.textContent = gold.toLocaleString();
+  energyFill.style.width = (energy/MAX_ENERGY*100)+'%';
+}
+render();
 
-  if(screen==='loading'){
-    app.innerHTML=`<div class="screen"><h2>${t.loading}</h2></div>`;
-    setTimeout(()=>{
-      screen=name?'game':'name';
-      render();
-    },1200);
-    return;
-  }
+/* TAP */
+orb.onclick = e=>{
+  if(energy<=0) return;
+  energy--;
+  gold++;
+  save(); render();
 
-  if(screen==='name'){
-    app.innerHTML=`
-      <div class="screen">
-        <h2>${t.name}</h2>
-        <input id="nm">
-        <button class="btn" onclick="saveName()">${t.save}</button>
-      </div>`;
-    return;
-  }
+  const r=zone.getBoundingClientRect();
+  const f=document.createElement('div');
+  f.className='float';
+  f.textContent='+1';
+  f.style.left=(e.clientX-r.left)+'px';
+  f.style.top=(e.clientY-r.top)+'px';
+  zone.appendChild(f);
+  setTimeout(()=>f.remove(),900);
+};
 
-  if(screen==='game'){
-    app.innerHTML=`
-      <div class="app">
-        <div class="top">
-          <div class="title">${name}</div>
-          <div class="lang">
-            <span class="${lang==='ru'?'active':''}" onclick="setLang('ru')">RU</span>|
-            <span class="${lang==='en'?'active':''}" onclick="setLang('en')">EN</span>
-          </div>
-        </div>
+/* ENERGY REGEN */
+setInterval(()=>{
+  energy=Math.min(MAX_ENERGY,energy+1);
+  save(); render();
+},1000);
 
-        <div class="center" id="zone">
-          <div class="core" id="core">${t.tap}</div>
-        </div>
-
-        <div class="gold">${gold.toFixed(1)} G</div>
-        <div class="small">${t.limit(tapsToday)}</div>
-
-        <div class="card">
-          <button class="btn" onclick="useBoost()">
-            ${boost ? t.boostOn(boostLeft) :
-              boostCd>0 ? t.boostCd(boostCd) : t.boost}
-          </button>
-        </div>
-
-        <div class="card">
-          <h4>${t.lb}</h4>
-          <ul id="lb"></ul>
-        </div>
-
-        <button class="btn secondary" onclick="screen='withdraw';render()">
-          ${t.withdraw}
-        </button>
-      </div>`;
-    bindTap();
-    renderLB();
-    return;
-  }
-
-  if(screen==='withdraw'){
-    app.innerHTML=`
-      <div class="screen">
-        <h2>${t.withdraw}</h2>
-        <div class="small">${t.rate}</div>
-        <input id="gid" placeholder="${t.gid}">
-        <input id="amt" placeholder="${t.amount}">
-        <button class="btn" onclick="withdraw()">${t.withdraw}</button>
-        <button class="btn secondary" onclick="screen='game';render()">← Back</button>
-      </div>`;
-  }
+/* NAV */
+function show(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-/* ===== ACTIONS ===== */
-function saveName(){
-  const v=document.getElementById('nm').value.trim();
-  if(v){
-    name=v;
-    localStorage.setItem('name',name);
-    screen='game';
-    render();
-  }
-}
-
-function bindTap(){
-  const core=document.getElementById('core');
-  const zone=document.getElementById('zone');
-  core.onclick=e=>{
-    if(tapsToday>=DAILY_LIMIT) return;
-
-    tapsToday++;
-    localStorage.setItem('taps_today',tapsToday);
-
-    const gain = RATE * (boost?2:1);
-    gold+=gain;
-    localStorage.setItem('gold',gold);
-
-    const r=zone.getBoundingClientRect();
-    const f=document.createElement('div');
-    f.className='float';
-    f.textContent=`+${gain}G`;
-    f.style.left=(e.clientX-r.left)+'px';
-    f.style.top=(e.clientY-r.top)+'px';
-    zone.appendChild(f);
-    setTimeout(()=>f.remove(),900);
-
-    updateLB();
-    render();
-  };
-}
-
-function useBoost(){
-  if(boost || boostCd>0) return;
-  boost=true;
-  boostLeft=BOOST_TIME;
-  const int=setInterval(()=>{
-    boostLeft--;
-    if(boostLeft<=0){
-      clearInterval(int);
-      boost=false;
-      boostCd=BOOST_COOLDOWN;
-      const cdInt=setInterval(()=>{
-        boostCd--;
-        if(boostCd<=0) clearInterval(cdInt);
-        render();
-      },1000);
-    }
-    render();
-  },1000);
-}
-
-function withdraw(){
+/* WITHDRAW */
+function doWithdraw(){
   const id=document.getElementById('gid').value;
-  const amt=parseFloat(document.getElementById('amt').value);
-  if(!/^[0-9]+$/.test(id)||amt<MIN_WITHDRAW||amt>gold){
+  const amt=+document.getElementById('amt').value;
+  if(!id||amt<=0||amt>gold){
     alert('Invalid data');
     return;
   }
   gold-=amt;
-  localStorage.setItem('gold',gold);
+  save(); render();
   alert('Success');
-  screen='game';
-  render();
 }
-
-/* ===== LEADERBOARD ===== */
-function updateLB(){
-  let lb=JSON.parse(localStorage.getItem('lb')||'[]');
-  lb.push({name,gold});
-  lb=lb.sort((a,b)=>b.gold-a.gold).slice(0,5);
-  localStorage.setItem('lb',JSON.stringify(lb));
-}
-function renderLB(){
-  const ul=document.getElementById('lb');
-  if(!ul) return;
-  const lb=JSON.parse(localStorage.getItem('lb')||'[]');
-  ul.innerHTML='';
-  lb.forEach((e,i)=>{
-    const li=document.createElement('li');
-    li.textContent=`${i+1}. ${e.name} — ${e.gold.toFixed(1)}G`;
-    ul.appendChild(li);
-  });
-}
-
-function setLang(l){
-  lang=l;
-  localStorage.setItem('lang',lang);
-  render();
-}
-
-/* ===== START ===== */
-render();
 </script>
 </body>
 </html>
