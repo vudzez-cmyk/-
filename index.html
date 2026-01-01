@@ -1,168 +1,25 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MINES</title>
-
-  <!-- React -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(ellipse at center, #1c1f2a 0%, #0e1017 70%);
-      color: #fff;
+React.createElement('h2', null, 'Сигнал'),
+          React.createElement('div', { className: 'grid' },
+            cells.map((_, i) =>
+              React.createElement('div', { key: i, className: 'cell' },
+                opened.includes(i) ? '⭐' : ''
+              )
+            )
+          ),
+          React.createElement('button', {
+            className: 'btn-primary',
+            onClick: getSignal
+          }, 'Получить сигнал')
+        )
+      );
     }
-    .screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-      text-align: center;
-    }
-    button {
-      width: 100%;
-      max-width: 320px;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .btn-primary {
-      background: #f6c94b;
-      color: #000;
-    }
-    .btn-disabled {
-      background: #555;
-      color: #aaa;
-    }
-    input {
-      width: 100%;
-      max-width: 320px;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      font-size: 18px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin: 20px 0;
-    }
-    .cell {
-      width: 50px;
-      height: 50px;
-      background: #2a2d3d;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
+  }
 
-  <script>
-    const { useState, useEffect } = React;
+  ReactDOM.render(
+    React.createElement(App),
+    document.getElementById('app')
+  );
+</script>
 
-    function App() {
-      const [screen, setScreen] = useState('splash');
-      const [id, setId] = useState('');
-      const [opened, setOpened] = useState([]);
-
-      // Splash → Enter ID
-      useEffect(() => {
-        if (screen === 'splash') {
-          setTimeout(() => setScreen('enter'), 2500);
-        }
-      }, [screen]);
-
-      // ===== SCREENS =====
-
-      if (screen === 'splash') {
-        return (
-          React.createElement('div', { className: 'screen' },
-            React.createElement('h1', null, 'MINES'),
-            React.createElement('div', null, 'Загрузка...')
-          )
-        );
-      }
-
-      if (screen === 'enter') {
-        return (
-          React.createElement('div', { className: 'screen' },
-            React.createElement('h2', null, 'Введите ID 1win'),
-            React.createElement('input', {
-              value: id,
-              inputMode: 'numeric',
-              onChange: e => setId(e.target.value.replace(/\\D/g, '')),
-              placeholder: 'Ваш ID'
-            }),
-            React.createElement('button', {
-              className: id ? 'btn-primary' : 'btn-disabled',
-              disabled: !id,
-              onClick: () => setScreen('final')
-            }, 'Продолжить')
-          )
-        );
-      }
-
-      if (screen === 'final') {
-        return (
-          React.createElement('div', { className: 'screen' },
-            React.createElement('h2', null, 'Остался один шаг'),
-            React.createElement('button', {
-              className: 'btn-primary',
-              onClick: () => setScreen('signal')
-            }, 'Продолжить')
-          )
-        );
-      }
-
-      if (screen === 'signal') {
-        const cells = Array.from({ length: 25 });
-
-        const getSignal = () => {
-          const stars = [];
-          while (stars.length < 5) {
-            const r = Math.floor(Math.random() * 25);
-            if (!stars.includes(r)) stars.push(r);
-          }
-          setOpened(stars);
-        };
-
-        return (
-          React.createElement('div', { className: 'screen' },
-            React.createElement('h2', null, 'Сигнал'),
-            React.createElement('div', { className: 'grid' },
-              cells.map((_, i) =>
-                React.createElement('div', { key: i, className: 'cell' },
-                  opened.includes(i) ? '⭐' : ''
-                )),
-            React.createElement('button', {
-              className: 'btn-primary',
-              onClick: getSignal
-            }, 'Получить сигнал')
-          )
-        );
-      }
-    }
-
-    ReactDOM.createRoot(document.getElementById('app')).render(
-      React.createElement(App)
-    );
-  </script>
 </body>
-</html>)
+</html>
