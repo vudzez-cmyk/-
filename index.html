@@ -116,7 +116,7 @@
       return (
         React.createElement('div', { className: 'screen' },
           React.createElement('img', {
-            src: 'mines.jpg',
+            src: './mines.jpg',
             className: 'mines-logo'
           })
         )
@@ -147,17 +147,17 @@
       React.createElement('div', { className: 'screen' },
 
         React.createElement('img', {
-          src: '1win.jpg',
+          src: './1win.jpg',
           className: 'logo-1win'
         }),
 
         React.createElement('div', { className: 'board' },
-          React.createElement('img', { src: 'grid.jpg' }),
+          React.createElement('img', { src: './grid.jpg' }),
 
           stars.map(i =>
             React.createElement('img', {
               key: i,
-              src: 'star.jpg',
+              src: './star.jpg',
               className: 'star',
               style: {
                 left: POSITIONS[i][0] + '%',
