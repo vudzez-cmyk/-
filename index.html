@@ -46,6 +46,14 @@
       margin-bottom: 20px;
     }
 
+    .logo-1win {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f5c451;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+
     h2 {
       font-size: 22px;
       margin-bottom: 14px;
@@ -85,7 +93,7 @@
       font-weight: 700;
       letter-spacing: 0.3px;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.15s ease;
     }
 
     .btn-primary {
@@ -107,7 +115,7 @@
       display: grid;
       grid-template-columns: repeat(5, 56px);
       gap: 12px;
-      margin: 24px 0;
+      margin: 20px 0 26px;
     }
 
     .cell {
@@ -134,112 +142,4 @@
       position: absolute;
       inset: -6px;
       border-radius: 16px;
-      background: radial-gradient(circle, rgba(245,196,81,0.35), transparent 60%);
-      z-index: -1;
-    }
-  </style>
-</head>
-
-<body>
-<div id="app"></div>
-
-<script>
-  if (window.Telegram && window.Telegram.WebApp) {
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-  }
-
-  const { useState, useEffect } = React;
-
-  const StarIcon = React.createElement(
-    'svg',
-    { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none' },
-    React.createElement('path', {
-      d: 'M12 2L14.9 8.6L22 9.3L16.5 14.1L18.2 21L12 17.3L5.8 21L7.5 14.1L2 9.3L9.1 8.6L12 2Z',
-      fill: '#F5C451'
-    })
-  );
-
-  function App() {
-    const [screen, setScreen] = useState('splash');
-    const [userId, setUserId] = useState('');
-    const [opened, setOpened] = useState([]);
-
-    useEffect(() => {
-      if (screen === 'splash') {
-        setTimeout(() => setScreen('enter'), 2500);
-      }
-    }, [screen]);
-
-    if (screen === 'splash') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('div', { className: 'logo' }, 'MINES'),
-        React.createElement('div', null, 'Загрузка...')
-      );
-    }
-
-    if (screen === 'enter') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('h2', null, 'Введите ID 1win'),
-        React.createElement('input', {
-          value: userId,
-          placeholder: 'Ваш ID',
-          inputMode: 'numeric',
-          onChange: e => setUserId(e.target.value.replace(/\D/g, ''))
-        }),
-        React.createElement('button', {
-          className: userId ? 'btn-primary' : 'btn-disabled',
-          disabled: !userId,
-          onClick: () => setScreen('final')
-        }, 'Продолжить')
-      );
-    }
-
-    if (screen === 'final') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('h2', null, 'Остался один шаг'),
-        React.createElement('div', { className: 'subtitle' }, 'Нажмите кнопку, чтобы получить сигнал'),
-        React.createElement('button', {
-          className: 'btn-primary',
-          onClick: () => setScreen('signal')
-        }, 'Продолжить')
-      );
-    }
-
-    if (screen === 'signal') {
-      const cells = Array.from({ length: 25 });
-
-      function getSignal() {
-        const stars = [];
-        while (stars.length < 5) {
-          const r = Math.floor(Math.random() * 25);
-          if (!stars.includes(r)) stars.push(r);
-        }
-        setOpened(stars);
-      }
-
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('h2', null, 'Сигнал'),
-        React.createElement('div', { className: 'grid' },
-          cells.map((_, i) =>
-            React.createElement('div', {
-              key: i,
-              className: 'cell' + (opened.includes(i) ? ' open' : '')
-            }, opened.includes(i) ? StarIcon : null)
-          )
-        ),
-        React.createElement('button', {
-          className: 'btn-primary',
-          onClick: getSignal
-        }, 'Получить сигнал')
-      );
-    }
-  }
-
-  ReactDOM.render(
-    React.createElement(App),
-    document.getElementById('app')
-  );
-</script>
-</body>
-</html>
+      background: radial-gradient(circle, rgba(2
