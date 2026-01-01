@@ -1,250 +1,239 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>MINES</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>STANDOFF GOLD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<style>
+*{ -webkit-tap-highlight-color:transparent }
+body{
+  margin:0;
+  background: radial-gradient(circle at top, #0b0f1a 0%, #05070f 70%);
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  color:#fff;
+  overflow:hidden;
+}
+.app{
+  height:100vh;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  padding:16px;
+  box-sizing:border-box;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.title{
+  font-weight:900;
+  letter-spacing:2px;
+}
+.gold{
+  color:#ffd36a;
+  font-size:26px;
+  font-weight:900;
+}
+.center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.core{
+  width:220px;height:220px;border-radius:18px;
+  background:
+    radial-gradient(circle at 30% 30%, #ffd36a, #c9a132 70%);
+  box-shadow:
+    0 0 30px rgba(255,211,106,.55),
+    inset 0 6px 10px rgba(255,255,255,.35),
+    inset 0 -12px 20px rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#2b1c00;
+  user-select:none;cursor:pointer;
+  transition:transform .05s ease;
+}
+.core:active{ transform:scale(.95) }
 
-  <style>
-    body {
-      margin: 0;
-      background: radial-gradient(ellipse at top, #0c1426 0%, #060912 70%);
-      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-      color: #fff;
-    }
+.float{
+  position:absolute;
+  font-weight:800;
+  color:#ffd36a;
+  text-shadow:0 0 12px rgba(255,211,106,.9);
+  animation:floatUp .9s ease forwards;
+}
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-60px);opacity:0}
+}
 
-    .screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-    }
+.bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.card{
+  background:rgba(255,255,255,.05);
+  border-radius:14px;
+  padding:14px;
+}
+.card h4{
+  margin:0 0 10px 0;
+  font-size:14px;
+  opacity:.9;
+}
+.btn{
+  width:100%;height:44px;
+  border-radius:12px;border:none;
+  background:#ffd36a;
+  color:#2b1c00;
+  font-weight:900;
+  cursor:pointer;
+}
+.btn.secondary{
+  background:transparent;
+  border:1px solid #ffd36a;
+  color:#ffd36a;
+}
+.btn:disabled{ opacity:.6; cursor:default }
+.small{ font-size:12px; opacity:.8 }
 
-    /* LANG */
-    .lang {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 14px;
-      cursor: pointer;
-      opacity: .8;
-    }
-    .lang span {
-      margin: 0 6px;
-      cursor: pointer;
-    }
-    .lang .active {
-      font-weight: 700;
-      opacity: 1;
-    }
+input{
+  width:100%;height:44px;
+  border-radius:12px;border:none;
+  padding:0 12px;
+  font-size:15px;
+  margin-bottom:10px;
+}
 
-    /* LOADING */
-    .title {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: 4px;
-      color: #f5c451;
-      animation: pulse 1.4s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: .4 }
-      50% { opacity: 1 }
-      100% { opacity: .4 }
-    }
-
-    /* INPUT */
-    .input {
-      width: 260px;
-      height: 48px;
-      border-radius: 12px;
-      border: none;
-      padding: 0 14px;
-      font-size: 16px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .error {
-      margin-top: 12px;
-      color: #ff6b6b;
-      font-size: 14px;
-    }
-
-    /* BOARD */
-    .board {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .cell {
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      background: linear-gradient(180deg, #1a233d, #0e1324);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-    }
-
-    .star {
-      font-size: 26px;
-      color: #f5c451;
-      animation: pop .25s ease forwards;
-      text-shadow: 0 0 12px rgba(245,196,81,.9);
-    }
-
-    @keyframes pop {
-      from { transform: scale(0); }
-      to { transform: scale(1); }
-    }
-
-    button {
-      margin-top: 26px;
-      width: 260px;
-      height: 48px;
-      border-radius: 12px;
-      border: none;
-      background: #f5c451;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: default;
-    }
-  </style>
+/* MODAL */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+.modal .box{
+  background:#0b0f1a;
+  border-radius:16px;
+  padding:22px;
+  width:280px;
+  text-align:center;
+  box-shadow:0 0 30px rgba(255,211,106,.25);
+}
+.modal .ok{
+  font-size:28px;
+  color:#ffd36a;
+  margin-bottom:8px;
+}
+</style>
 </head>
 
 <body>
-<div id="app"></div>
+<div class="app">
+  <div class="top">
+    <div class="title">STANDOFF GOLD</div>
+    <div class="gold" id="goldTxt">0</div>
+  </div>
+
+  <div class="center" id="zone">
+    <div class="core" id="core">TAP</div>
+  </div>
+
+  <div class="bottom">
+    <div class="card">
+      <h4>💰 Баланс</h4>
+      <div class="gold" id="goldBig">0</div>
+      <div class="small">Gold зарабатывается тапами</div>
+    </div>
+    <div class="card">
+      <h4>💳 Вывод Gold</h4>
+      <input id="gid" placeholder="Игровой ID" maxlength="12">
+      <button class="btn" id="withdrawBtn">Вывести</button>
+      <div class="small" id="wdInfo">Мин. вывод: 100 Gold</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="ok">✔</div>
+    <div>Заявка успешно отправлена</div>
+    <div class="small" id="modalTxt"></div>
+    <div style="height:12px"></div>
+    <button class="btn secondary" onclick="closeModal()">Ок</button>
+  </div>
+</div>
 
 <script>
-  const { useState, useEffect } = React;
+/* ===== CONFIG ===== */
+const MIN_WITHDRAW = 100;
 
-  const TEXT = {
-    ru: {
-      enterId: 'Введите ID 1win',
-      idPlaceholder: 'ID',
-      idError: 'Введите ID (только цифры)',
-      continue: 'Продолжить',
-      signal: 'Получить сигнал',
-      loading: 'Загрузка…'
-    },
-    en: {
-      enterId: 'Enter 1win ID',
-      idPlaceholder: 'ID',
-      idError: 'Enter ID (numbers only)',
-      continue: 'Continue',
-      signal: 'Get signal',
-      loading: 'Loading…'
-    }
-  };
+/* ===== STATE ===== */
+let gold = +localStorage.getItem('gold') || 0;
 
-  function App() {
-    const [lang, setLang] = useState('ru');
-    const [screen, setScreen] = useState('loading');
-    const [id, setId] = useState('');
-    const [error, setError] = useState('');
-    const [stars, setStars] = useState([]);
-    const [locked, setLocked] = useState(false);
+/* ===== DOM ===== */
+const goldTxt = document.getElementById('goldTxt');
+const goldBig = document.getElementById('goldBig');
+const core = document.getElementById('core');
+const zone = document.getElementById('zone');
+const gid = document.getElementById('gid');
+const withdrawBtn = document.getElementById('withdrawBtn');
+const modal = document.getElementById('modal');
+const modalTxt = document.getElementById('modalTxt');
 
-    const t = TEXT[lang];
+function save(){
+  localStorage.setItem('gold', gold);
+}
+function render(){
+  goldTxt.textContent = gold;
+  goldBig.textContent = gold;
+  withdrawBtn.disabled = gold < MIN_WITHDRAW;
+}
+render();
 
-    useEffect(() => {
-      setTimeout(() => setScreen('id'), 2000);
-    }, []);
+/* ===== TAP ===== */
+core.onclick = (e)=>{
+  gold++;
+  save(); render();
 
-    function submitId() {
-      if (!/^[0-9]+$/.test(id)) {
-        setError(t.idError);
-        return;
-      }
-      setError('');
-      setScreen('game');
-    }
+  const r = zone.getBoundingClientRect();
+  const f = document.createElement('div');
+  f.className='float';
+  f.textContent='+1 Gold';
+  f.style.left=(e.clientX-r.left)+'px';
+  f.style.top=(e.clientY-r.top)+'px';
+  zone.appendChild(f);
+  setTimeout(()=>f.remove(),900);
+};
 
-    function getSignal() {
-      if (locked) return;
-      setLocked(true);
-      setStars([]);
-
-      const picks = [];
-      while (picks.length < 5) {
-        const r = Math.floor(Math.random() * 25);
-        if (!picks.includes(r)) picks.push(r);
-      }
-
-      picks.forEach((idx, i) => {
-        setTimeout(() => {
-          setStars(prev => [...prev, idx]);
-          if (i === picks.length - 1) setLocked(false);
-        }, i * 400);
-      });
-    }
-
-    return (
-      React.createElement('div', { className: 'screen' },
-
-        React.createElement('div', { className: 'lang' },
-          React.createElement('span', {
-            className: lang === 'ru' ? 'active' : '',
-            onClick: () => setLang('ru')
-          }, 'RU'),
-          '|',
-          React.createElement('span', {
-            className: lang === 'en' ? 'active' : '',
-            onClick: () => setLang('en')
-          }, 'EN')
-        ),
-
-        screen === 'loading' && React.createElement('div', { className: 'title' }, 'MINES'),
-
-        screen === 'id' && React.createElement(React.Fragment, null,
-          React.createElement('div', null, t.enterId),
-          React.createElement('input', {
-            className: 'input',
-            value: id,
-            onChange: e => setId(e.target.value),
-            placeholder: t.idPlaceholder,
-            maxLength: 12
-          }),
-          error && React.createElement('div', { className: 'error' }, error),
-          React.createElement('button', { onClick: submitId }, t.continue)
-        ),
-
-        screen === 'game' && React.createElement(React.Fragment, null,
-          React.createElement('div', { className: 'board' },
-            Array.from({ length: 25 }).map((_, i) =>
-              React.createElement('div', { key: i, className: 'cell' },
-                stars.includes(i) && React.createElement('div', { className: 'star' }, '★')
-              )
-            )
-          ),
-          React.createElement('button', {
-            onClick: getSignal,
-            disabled: locked
-          }, locked ? t.loading : t.signal)
-        )
-      )
-    );
+/* ===== WITHDRAW ===== */
+withdrawBtn.onclick = ()=>{
+  const id = gid.value.trim();
+  if(!/^[0-9]+$/.test(id)){
+    alert('Введите корректный ID (только цифры)');
+    return;
+  }
+  if(gold < MIN_WITHDRAW){
+    alert('Недостаточно Gold');
+    return;
   }
 
-  ReactDOM.render(
-    React.createElement(App),
-    document.getElementById('app')
-  );
+  // имитация отправки заявки
+  gold -= MIN_WITHDRAW;
+  save(); render();
+
+  modalTxt.textContent = `ID: ${id} • Сумма: ${MIN_WITHDRAW} Gold`;
+  modal.style.display='flex';
+};
+
+function closeModal(){
+  modal.style.display='none';
+}
 </script>
 </body>
 </html>
