@@ -4,142 +4,155 @@
   <meta charset="UTF-8">
   <title>MINES</title>
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Telegram -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <!-- React -->
+  <!-- React 17 (самый стабильный вариант) -->
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 
-  <!-- Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
   <style>
-    * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(ellipse at top, #1f2433 0%, #0b0e16 70%);
+      background: #0e1017;
       color: #fff;
+      font-family: Arial, sans-serif;
     }
 
     .screen {
       min-height: 100vh;
-      padding: 28px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
+      padding: 20px;
     }
 
-    .logo {
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-    }
-
-    .logo-1win {
-      font-size: 18px;
-      font-weight: 700;
-      color: #f5c451;
-      margin-bottom: 12px;
-      opacity: 0.9;
-    }
-
-    h2 {
-      font-size: 22px;
-      margin-bottom: 14px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #a1a6c1;
-      margin-bottom: 28px;
-    }
+    h1 { font-size: 36px; margin-bottom: 10px; }
+    h2 { font-size: 22px; margin-bottom: 16px; }
 
     input {
-      width: 100%;
-      max-width: 320px;
-      height: 52px;
-      background: #1f2433;
-      border-radius: 14px;
-      border: 1px solid #2f354d;
-      font-size: 18px;
-      font-weight: 600;
-      color: #fff;
+      width: 260px;
+      padding: 12px;
+      font-size: 16px;
       text-align: center;
-      margin-bottom: 22px;
-    }
-
-    input::placeholder {
-      color: #6b7190;
+      margin-bottom: 16px;
     }
 
     button {
-      width: 100%;
-      max-width: 320px;
-      height: 52px;
-      border-radius: 14px;
-      border: none;
+      width: 260px;
+      padding: 12px;
       font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
       cursor: pointer;
-      transition: transform 0.15s ease;
     }
 
-    .btn-primary {
-      background: #f5c451;
-      color: #000;
-    }
-
-    .btn-primary:active {
-      transform: scale(0.97);
-    }
-
-    .btn-disabled {
-      background: #2f3347;
-      color: #7b819b;
+    button:disabled {
+      opacity: 0.5;
       cursor: default;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(5, 56px);
-      gap: 12px;
-      margin: 20px 0 26px;
+      grid-template-columns: repeat(5, 50px);
+      gap: 10px;
+      margin: 20px 0;
     }
 
     .cell {
-      position: relative;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(180deg, #2b3050, #1c2036);
-      border-radius: 12px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+      width: 50px;
+      height: 50px;
+      background: #1c2030;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: scale(1);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      font-size: 22px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="app"></div>
+
+<script>
+  const { useState, useEffect } = React;
+
+  function App() {
+    const [screen, setScreen] = useState('splash');
+    const [userId, setUserId] = useState('');
+    const [opened, setOpened] = useState([]);
+
+    // splash → enter
+    useEffect(() => {
+      if (screen === 'splash') {
+        setTimeout(() => setScreen('enter'), 2000);
+      }
+    }, [screen]);
+
+    // SPLASH
+    if (screen === 'splash') {
+      return (
+        React.createElement('div', { className: 'screen' },
+          React.createElement('h1', null, 'MINES'),
+          React.createElement('div', null, 'Загрузка...')
+        )
+      );
     }
 
-    .cell.open {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(245,196,81,0.6);
+    // ENTER ID
+    if (screen === 'enter') {
+      return (
+        React.createElement('div', { className: 'screen' },
+          React.createElement('h2', null, 'Введите ID 1win'),
+          React.createElement('input', {
+            value: userId,
+            placeholder: 'ID',
+            onChange: e => setUserId(e.target.value.replace(/\D/g, ''))
+          }),
+          React.createElement('button', {
+            disabled: !userId,
+            onClick: () => setScreen('signal')
+          }, 'Продолжить')
+        )
+      );
     }
 
-    .cell.open::after {
-      content: '';
-      position: absolute;
-      inset: -6px;
-      border-radius: 16px;
-      background: radial-gradient(circle, rgba(2
+    // SIGNAL
+    const cells = Array.from({ length: 25 });
+
+    function getSignal() {
+      setOpened([]);
+      const stars = [];
+      while (stars.length < 5) {
+        const r = Math.floor(Math.random() * 25);
+        if (!stars.includes(r)) stars.push(r);
+      }
+
+      stars.forEach((i, idx) => {
+        setTimeout(() => {
+          setOpened(prev => [...prev, i]);
+        }, idx * 400);
+      });
+    }
+
+    return (
+      React.createElement('div', { className: 'screen' },
+        React.createElement('h2', null, 'Сигнал'),
+        React.createElement('div', { className: 'grid' },
+          cells.map((_, i) =>
+            React.createElement('div', { key: i, className: 'cell' },
+              opened.includes(i) ? '★' : ''
+            )
+          )
+        ),
+        React.createElement('button', { onClick: getSignal }, 'Получить сигнал')
+      )
+    );
+  }
+
+  ReactDOM.render(
+    React.createElement(App),
+    document.getElementById('app')
+  );
+</script>
+</body>
+</html>
