@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>GOLD TAP</title>
+<title>STANDOFF GOLD TAP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
 <style>
@@ -16,7 +16,7 @@ body{
 }
 :root{ --safe-bottom: env(safe-area-inset-bottom, 0px); }
 
-/* SUBSCRIBE */
+/* ---------- SUBSCRIBE ---------- */
 .subscribe{
   height:100vh;
   display:flex;
@@ -33,19 +33,40 @@ body{
   font-weight:900;margin-top:12px;
 }
 
-/* APP */
+/* ---------- APP ---------- */
 .app{
   height:100vh;
   display:grid;
   grid-template-rows:auto 1fr auto;
 }
 
-/* TOP */
-.top{text-align:center;padding:14px 0 6px}
-.balance{font-size:34px;font-weight:900}
-.unit{font-size:13px;opacity:.6}
+/* ---------- TOP ---------- */
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px 6px;
+}
+.app-title{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.6px;
+  opacity:.85;
+}
+.balance-wrap{
+  text-align:center;
+  flex:1;
+}
+.balance{
+  font-size:32px;
+  font-weight:900;
+}
+.unit{
+  font-size:12px;
+  opacity:.6;
+}
 
-/* CENTER */
+/* ---------- CENTER ---------- */
 .center{
   display:flex;
   flex-direction:column;
@@ -54,40 +75,82 @@ body{
   gap:18px;
 }
 
-/* ORB */
-.orb-wrap{position:relative}
-.orb-glow{
-  position:absolute;
-  inset:-55px;
-  background:radial-gradient(circle, rgba(255,170,0,.6), transparent 65%);
-  filter:blur(26px);
-  animation:pulse 3s infinite;
-}
-@keyframes pulse{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
-.orb{
-  width:240px;height:240px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#ffd36a,#ff9f00 70%);
-  box-shadow:0 0 70px rgba(255,180,0,.8);
-  display:flex;align-items:center;justify-content:center;
-  font-size:32px;font-weight:900;color:#2b1c00;
-  cursor:pointer;user-select:none;
-}
-.orb:active{transform:scale(.96)}
+/* ---------- ORB (NOTCOIN STYLE) ---------- */
+.orb-wrap{ position:relative; }
 
-/* ENERGY */
-.energy{width:80%}
+.orb-glow-back{
+  position:absolute;
+  inset:-95px;
+  background:
+    radial-gradient(circle,
+      rgba(255,170,0,.35) 0%,
+      rgba(255,170,0,.18) 35%,
+      rgba(255,170,0,.06) 55%,
+      transparent 70%);
+  filter:blur(42px);
+  animation:glowBreath 3.8s infinite ease-in-out;
+}
+
+.orb-glow-front{
+  position:absolute;
+  inset:-45px;
+  background:
+    radial-gradient(circle,
+      rgba(255,200,80,.65) 0%,
+      rgba(255,170,0,.35) 40%,
+      transparent 65%);
+  filter:blur(22px);
+  animation:glowBreath 3.8s infinite ease-in-out;
+}
+
+@keyframes glowBreath{
+  0%{opacity:.55}
+  50%{opacity:1}
+  100%{opacity:.55}
+}
+
+.orb{
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 28%,
+      #ffe29a 0%,
+      #ffbe3b 35%,
+      #ff9f00 70%);
+  box-shadow:
+    inset 0 0 18px rgba(255,255,255,.25),
+    inset 0 -18px 28px rgba(0,0,0,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  font-weight:900;
+  color:#2b1c00;
+  cursor:pointer;
+  user-select:none;
+}
+.orb:active{ transform:scale(.96); }
+
+/* ---------- ENERGY ---------- */
+.energy{ width:82%; }
 .energy-bar{
-  height:8px;background:#222;border-radius:6px;overflow:hidden
+  height:7px;
+  background:#222;
+  border-radius:6px;
+  overflow:hidden;
 }
 .energy-fill{
   height:100%;
   background:linear-gradient(90deg,#ffd36a,#ff9f00);
-  transition:width .4s ease;
+  transition:width .35s ease;
 }
 
-/* FLOAT */
+/* ---------- FLOAT ---------- */
 .float{
-  position:absolute;color:#ffd36a;font-weight:800;
+  position:absolute;
+  color:#ffd36a;
+  font-weight:800;
   animation:floatUp .9s ease forwards;
 }
 @keyframes floatUp{
@@ -95,52 +158,62 @@ body{
   to{transform:translateY(-60px);opacity:0}
 }
 
-/* MENU */
+/* ---------- MENU ---------- */
 .menu{
   display:flex;
   border-top:1px solid #222;
   padding-bottom:var(--safe-bottom);
 }
 .menu button{
-  flex:1;background:none;border:none;
-  color:#888;padding:10px 0;
+  flex:1;
+  background:none;
+  border:none;
+  color:#777;
+  padding:10px 0;
   font-size:11px;
-  display:flex;flex-direction:column;
-  align-items:center;gap:4px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
 }
 .menu svg{width:22px;height:22px;fill:currentColor}
 .menu .active{color:#ffb300;font-weight:700}
 
-/* SCREENS */
-.screen{display:none}
-.screen.active{display:block}
+/* ---------- SCREENS ---------- */
+.screen{ display:none; }
+.screen.active{ display:block; }
 
-/* PANELS */
-.panel{text-align:center;padding:24px}
+/* ---------- PANELS ---------- */
+.panel{
+  padding:24px;
+  text-align:center;
+}
 .card{
   background:rgba(255,255,255,.05);
   border-radius:14px;
   padding:14px;
   margin-top:12px;
 }
-input{
-  width:100%;height:44px;
-  border-radius:12px;border:none;
-  padding:0 12px;margin-top:10px;
-}
 .btn{
-  width:100%;height:44px;
-  border-radius:12px;border:none;
-  background:#ffb300;color:#2b1c00;
-  font-weight:900;margin-top:12px;
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  border:none;
+  background:#ffb300;
+  color:#2b1c00;
+  font-weight:900;
+  margin-top:12px;
 }
-.small{font-size:12px;opacity:.7}
+.small{
+  font-size:12px;
+  opacity:.7;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SUBSCRIBE -->
+<!-- ---------- SUBSCRIBE ---------- -->
 <div class="subscribe" id="subscribe">
   <h2>Подпишитесь на канал</h2>
   <div class="small">Для доступа к игре</div>
@@ -150,17 +223,24 @@ input{
 
 <div class="app" id="app" style="display:none">
 
-  <!-- EARN -->
+  <!-- ---------- EARN ---------- -->
   <div class="screen active" id="earn">
     <div class="top">
-      <div class="balance" id="balance">0</div>
-      <div class="unit">GOLD</div>
+      <div class="app-title">STANDOFF GOLD TAP</div>
+      <div class="balance-wrap">
+        <div class="balance" id="balance">0</div>
+        <div class="unit">GOLD</div>
+      </div>
+      <div style="width:60px"></div>
     </div>
+
     <div class="center" id="zone">
       <div class="orb-wrap">
-        <div class="orb-glow"></div>
+        <div class="orb-glow-back"></div>
+        <div class="orb-glow-front"></div>
         <div class="orb" id="orb">GOLD</div>
       </div>
+
       <div class="energy">
         <div class="energy-bar">
           <div class="energy-fill" id="energyFill"></div>
@@ -169,7 +249,7 @@ input{
     </div>
   </div>
 
-  <!-- BOOSTS -->
+  <!-- ---------- BOOSTS ---------- -->
   <div class="screen" id="boosts">
     <div class="panel">
       <h2>Boosts</h2>
@@ -188,18 +268,16 @@ input{
     </div>
   </div>
 
-  <!-- WITHDRAW -->
+  <!-- ---------- WITHDRAW ---------- -->
   <div class="screen" id="withdraw">
     <div class="panel">
       <h2>Вывод</h2>
       <div class="small">100 TAPS = 10 GOLD</div>
-      <input placeholder="Game ID">
-      <input placeholder="Сумма">
-      <button class="btn">Вывести</button>
+      <div class="small">Заглушка UI (backend позже)</div>
     </div>
   </div>
 
-  <!-- MENU -->
+  <!-- ---------- MENU ---------- -->
   <div class="menu">
     <button class="active" onclick="show('earn',this)">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Earn
@@ -240,11 +318,11 @@ const energyFill=document.getElementById('energyFill');
 const orb=document.getElementById('orb');
 const zone=document.getElementById('zone');
 
-if(sub){subScr.style.display='none';app.style.display='grid'}
+if(sub){ subScr.style.display='none'; app.style.display='grid'; }
 
-function now(){return Math.floor(Date.now()/1000)}
-function isB2x(){return now()<b2xUntil}
-function isAuto(){return now()<autoUntil}
+function now(){ return Math.floor(Date.now()/1000); }
+function isB2x(){ return now()<b2xUntil; }
+function isAuto(){ return now()<autoUntil; }
 
 function render(){
   balance.textContent=gold.toLocaleString();
@@ -263,8 +341,17 @@ function render(){
 }
 render();
 
+/* TELEGRAM HAPTIC */
+function haptic(){
+  try{
+    if(window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback){
+      Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }
+  }catch(e){}
+}
+
 /* SUB */
-function openTG(){window.open(TG,'_blank')}
+function openTG(){ window.open(TG,'_blank'); }
 function confirmSub(){
   localStorage.setItem('sub','1');
   subScr.style.display='none';
@@ -276,20 +363,23 @@ orb.onclick=e=>{
   if(energy<=0) return;
   energy--;
   gold+=isB2x()?2:1;
+
   localStorage.setItem('gold',gold);
   localStorage.setItem('energy',energy);
   render();
+  haptic();
 
   const r=zone.getBoundingClientRect();
   const f=document.createElement('div');
-  f.className='float';f.textContent='+'+(isB2x()?2:1);
+  f.className='float';
+  f.textContent='+'+(isB2x()?2:1);
   f.style.left=(e.clientX-r.left)+'px';
   f.style.top=(e.clientY-r.top)+'px';
   zone.appendChild(f);
   setTimeout(()=>f.remove(),900);
 };
 
-/* ENERGY */
+/* ENERGY REGEN */
 setInterval(()=>{
   energy=Math.min(MAX,energy+1);
   localStorage.setItem('energy',energy);
@@ -298,7 +388,7 @@ setInterval(()=>{
 
 /* AUTO TAP */
 setInterval(()=>{
-  if(isAuto()&&energy>0){
+  if(isAuto() && energy>0){
     energy--;
     gold+=isB2x()?2:1;
     localStorage.setItem('gold',gold);
