@@ -12,8 +12,8 @@
     body {
       margin: 0;
       background: radial-gradient(ellipse at top, #0b1220 0%, #05070f 70%);
-      color: #fff;
       font-family: Arial, sans-serif;
+      color: #fff;
     }
 
     .screen {
@@ -26,17 +26,11 @@
       text-align: center;
     }
 
-    /* SPLASH */
-    .mines-logo {
-      width: 260px;
-    }
-
-    /* SIGNAL */
     .logo-1win {
       position: absolute;
       top: 14px;
       right: 14px;
-      width: 70px;
+      width: 72px;
       opacity: 0.95;
     }
 
@@ -53,12 +47,12 @@
 
     .star {
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       transform: scale(0);
       animation: pop 0.25s ease forwards;
       pointer-events: none;
-      filter: drop-shadow(0 0 12px rgba(255,190,80,0.9));
+      filter: drop-shadow(0 0 12px rgba(255,180,80,0.95));
     }
 
     @keyframes pop {
@@ -66,7 +60,7 @@
     }
 
     button {
-      margin-top: 26px;
+      margin-top: 28px;
       width: 260px;
       height: 48px;
       border-radius: 12px;
@@ -90,11 +84,18 @@
 <script>
   const { useState, useEffect } = React;
 
-  /*
-    ТОЧНЫЕ КООРДИНАТЫ 5x5
-    Подогнаны под ТВОЙ PNG grid.png
-    Если нужно — дальше можем подвинуть на ±1–2%
-  */
+  /* ===== BASE64 ASSETS ===== */
+
+  const GRID_IMG =
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAAgABQ...";
+
+  const STAR_IMG =
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAAgABQ...";
+
+  const ONEWIN_IMG =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAGuCAYAAABoVWLpAAAACXBI...";
+
+  /* ===== POSITIONS 5x5 ===== */
   const POSITIONS = [
     [10,10],[30,10],[50,10],[70,10],[90,10],
     [10,30],[30,30],[50,30],[70,30],[90,30],
@@ -104,29 +105,9 @@
   ];
 
   function App() {
-    const [screen, setScreen] = useState('splash');
     const [stars, setStars] = useState([]);
     const [locked, setLocked] = useState(false);
 
-    useEffect(() => {
-      if (screen === 'splash') {
-        setTimeout(() => setScreen('signal'), 2200);
-      }
-    }, [screen]);
-
-    /* ===== SPLASH ===== */
-    if (screen === 'splash') {
-      return (
-        React.createElement('div', { className: 'screen' },
-          React.createElement('img', {
-            src: 'mines.png',
-            className: 'mines-logo'
-          })
-        )
-      );
-    }
-
-    /* ===== SIGNAL ===== */
     function getSignal() {
       if (locked) return;
       setLocked(true);
@@ -150,17 +131,17 @@
       React.createElement('div', { className: 'screen' },
 
         React.createElement('img', {
-          src: '1win.png',
+          src: ONEWIN_IMG,
           className: 'logo-1win'
         }),
 
         React.createElement('div', { className: 'board' },
-          React.createElement('img', { src: 'grid.png' }),
+          React.createElement('img', { src: GRID_IMG }),
 
           stars.map(i =>
             React.createElement('img', {
               key: i,
-              src: 'star.png',
+              src: STAR_IMG,
               className: 'star',
               style: {
                 left: POSITIONS[i][0] + '%',
