@@ -1,0 +1,109 @@
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+}
+.hidden{display:none}
+
+.app{
+  height:100dvh;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  padding:14px 16px;
+}
+
+.balance{
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
+}
+
+.center{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.orb-wrap{
+  position:relative;
+  width:240px;
+  height:240px;
+}
+
+.glow{
+  position:absolute;
+  inset:-60px;
+  pointer-events:none;
+}
+.glow.back{
+  background:radial-gradient(circle,rgba(255,170,0,.35),transparent 70%);
+  filter:blur(45px);
+}
+.glow.front{
+  inset:-30px;
+  background:radial-gradient(circle,rgba(255,200,80,.6),transparent 65%);
+  filter:blur(20px);
+}
+
+.orb{
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#ffe29a,#ffb300 60%,#ff9800);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  font-weight:900;
+  color:#2b1c00;
+}
+
+.energy{
+  width:80%;
+  margin-top:18px;
+}
+.energy-bar{
+  height:7px;
+  background:#222;
+  border-radius:6px;
+}
+.energy-fill{
+  height:100%;
+  background:linear-gradient(90deg,#ffd36a,#ff9f00);
+}
+
+.menu{
+  display:flex;
+  border-top:1px solid #222;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.menu button{
+  flex:1;
+  background:none;
+  border:none;
+  color:#888;
+  padding:12px;
+}
+.menu .active{color:#ffb300}
+
+.panel{padding:24px}
+.card{
+  background:rgba(255,255,255,.05);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+}
+input,button{
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  margin-top:10px;
+}
