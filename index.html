@@ -91,6 +91,7 @@
 <script>
   const { useState, useEffect } = React;
 
+  // координаты под сетку 5x5
   const POSITIONS = [
     [10,10],[30,10],[50,10],[70,10],[90,10],
     [10,30],[30,30],[50,30],[70,30],[90,30],
@@ -110,19 +111,19 @@
       }
     }, [screen]);
 
-    /* SPLASH */
+    // SPLASH SCREEN
     if (screen === 'splash') {
       return (
         React.createElement('div', { className: 'screen' },
           React.createElement('img', {
-            src: 'mines.png',
+            src: 'mines.jpg',
             className: 'mines-logo'
           })
         )
       );
     }
 
-    /* SIGNAL */
+    // SIGNAL SCREEN
     function getSignal() {
       if (locked) return;
       setLocked(true);
@@ -146,17 +147,17 @@
       React.createElement('div', { className: 'screen' },
 
         React.createElement('img', {
-          src: '1win.png',
+          src: '1win.jpg',
           className: 'logo-1win'
         }),
 
         React.createElement('div', { className: 'board' },
-          React.createElement('img', { src: 'grid.png' }),
+          React.createElement('img', { src: 'grid.jpg' }),
 
           stars.map(i =>
             React.createElement('img', {
               key: i,
-              src: 'star.png',
+              src: 'star.jpg',
               className: 'star',
               style: {
                 left: POSITIONS[i][0] + '%',
