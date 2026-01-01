@@ -30,6 +30,7 @@
       top: 14px;
       right: 14px;
       width: 72px;
+      opacity: 0.95;
     }
     .board {
       position: relative;
@@ -57,6 +58,10 @@
       font-weight: 700;
       cursor: pointer;
     }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
   </style>
 </head>
 
@@ -65,8 +70,6 @@
 
 <script>
   const { useState, useEffect } = React;
-
-  const BASE = '/-/'; // <-- ВАЖНО
 
   const POSITIONS = [
     [10,10],[30,10],[50,10],[70,10],[90,10],
@@ -89,7 +92,7 @@
 
     if (screen === 'splash') {
       return React.createElement('div', { className: 'screen' },
-        React.createElement('img', { src: BASE + 'mines.jpg', className: 'mines-logo' })
+        React.createElement('img', { src: '/mines.jpg', className: 'mines-logo' })
       );
     }
 
@@ -106,20 +109,21 @@
 
       picks.forEach((idx, i) => {
         setTimeout(() => {
-          setStars(p => [...p, idx]);
+          setStars(prev => [...prev, idx]);
           if (i === picks.length - 1) setLocked(false);
         }, i * 420);
       });
     }
 
     return React.createElement('div', { className: 'screen' },
-      React.createElement('img', { src: BASE + '1win.jpg', className: 'logo-1win' }),
+      React.createElement('img', { src: '/1win.jpg', className: 'logo-1win' }),
       React.createElement('div', { className: 'board' },
-        React.createElement('img', { src: BASE + 'grid.jpg' }),
+        React.createElement('img', { src: '/grid.jpg' }),
+
         stars.map(i =>
           React.createElement('img', {
             key: i,
-            src: BASE + 'star.jpg',
+            src: '/star.jpg',
             className: 'star',
             style: {
               left: POSITIONS[i][0] + '%',
@@ -129,13 +133,17 @@
           })
         )
       ),
-      React.createElement('button', { onClick: getSignal, disabled: locked },
-        locked ? 'Загрузка…' : 'Получить сигнал'
-      )
+      React.createElement('button', {
+        onClick: getSignal,
+        disabled: locked
+      }, locked ? 'Загрузка…' : 'Получить сигнал')
     );
   }
 
-  ReactDOM.render(React.createElement(App), document.getElementById('app'));
+  ReactDOM.render(
+    React.createElement(App),
+    document.getElementById('app')
+  );
 </script>
 </body>
 </html>
