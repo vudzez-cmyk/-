@@ -5,119 +5,81 @@
   <title>MINES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- React -->
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(ellipse at top, #1b1f2f 0%, #0b0e16 70%);
+      background: radial-gradient(ellipse at top, #0b1220 0%, #05070f 70%);
       color: #fff;
+      font-family: Arial, sans-serif;
     }
 
     .screen {
       min-height: 100vh;
-      padding: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
       text-align: center;
     }
 
-    h1 {
-      font-size: 38px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
+    /* SPLASH */
+    .mines-logo {
+      width: 260px;
     }
 
-    h2 {
-      font-size: 22px;
-      margin-bottom: 12px;
-    }
-
-    .hint {
-      font-size: 14px;
-      color: #9aa0c3;
-      margin-bottom: 20px;
-    }
-
-    .lang {
+    /* SIGNAL */
+    .logo-1win {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 14px;
-      opacity: 0.8;
-      cursor: pointer;
+      top: 14px;
+      right: 14px;
+      width: 70px;
+      opacity: 0.95;
     }
 
-    input {
-      width: 280px;
-      height: 48px;
-      border-radius: 12px;
-      border: 1px solid #2f354d;
-      background: #1b1f2f;
-      color: #fff;
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 18px;
+    .board {
+      position: relative;
+      width: 300px;
+      margin-top: 40px;
     }
 
-    input::placeholder { color: #6f7595; }
+    .board img {
+      width: 100%;
+      display: block;
+    }
+
+    .star {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      transform: scale(0);
+      animation: pop 0.25s ease forwards;
+      pointer-events: none;
+      filter: drop-shadow(0 0 12px rgba(255,190,80,0.9));
+    }
+
+    @keyframes pop {
+      to { transform: scale(1); }
+    }
 
     button {
-      width: 280px;
+      margin-top: 26px;
+      width: 260px;
       height: 48px;
       border-radius: 12px;
       border: none;
-      font-size: 15px;
+      background: #f5c451;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      background: #f5c451;
-      color: #000;
-      transition: transform 0.15s ease;
     }
 
-    button:active { transform: scale(0.97); }
-    button:disabled { opacity: 0.5; cursor: default; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 52px);
-      gap: 10px;
-      margin: 22px 0;
-    }
-
-    .cell {
-      position: relative;
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      background: linear-gradient(180deg, #2b3050, #1c2036);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .cell.open {
-      transform: scale(1.05);
-      box-shadow: 0 0 14px rgba(245,196,81,0.7);
-    }
-
-    .cell.open::after {
-      content: '';
-      position: absolute;
-      inset: -6px;
-      border-radius: 14px;
-      background: radial-gradient(circle, rgba(245,196,81,0.35), transparent 60%);
-      z-index: -1;
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
     }
   </style>
 </head>
@@ -128,115 +90,92 @@
 <script>
   const { useState, useEffect } = React;
 
-  const TEXT = {
-    ru: {
-      loading: 'Загрузка…',
-      enterTitle: 'Введите ID 1win',
-      placeholder: 'Ваш ID',
-      continue: 'Продолжить',
-      finalTitle: 'Остался один шаг',
-      finalText: 'Нажмите кнопку, чтобы получить сигнал',
-      signal: 'Сигнал',
-      get: 'Получить сигнал'
-    },
-    en: {
-      loading: 'Loading…',
-      enterTitle: 'Enter 1win ID',
-      placeholder: 'Your ID',
-      continue: 'Continue',
-      finalTitle: 'One step left',
-      finalText: 'Press the button to get a signal',
-      signal: 'Signal',
-      get: 'Get signal'
-    }
-  };
-
-  const StarSVG = React.createElement(
-    'svg',
-    { width: 20, height: 20, viewBox: '0 0 24 24' },
-    React.createElement('path', {
-      fill: '#f5c451',
-      d: 'M12 2L15 8.5L22 9.3L17 14L18.5 21L12 17.3L5.5 21L7 14L2 9.3L9 8.5Z'
-    })
-  );
+  /*
+    ТОЧНЫЕ КООРДИНАТЫ 5x5
+    Подогнаны под ТВОЙ PNG grid.png
+    Если нужно — дальше можем подвинуть на ±1–2%
+  */
+  const POSITIONS = [
+    [10,10],[30,10],[50,10],[70,10],[90,10],
+    [10,30],[30,30],[50,30],[70,30],[90,30],
+    [10,50],[30,50],[50,50],[70,50],[90,50],
+    [10,70],[30,70],[50,70],[70,70],[90,70],
+    [10,90],[30,90],[50,90],[70,90],[90,90],
+  ];
 
   function App() {
     const [screen, setScreen] = useState('splash');
-    const [userId, setUserId] = useState('');
-    const [opened, setOpened] = useState([]);
-    const [lang, setLang] = useState('ru');
-
-    const t = TEXT[lang];
+    const [stars, setStars] = useState([]);
+    const [locked, setLocked] = useState(false);
 
     useEffect(() => {
       if (screen === 'splash') {
-        setTimeout(() => setScreen('enter'), 2000);
+        setTimeout(() => setScreen('signal'), 2200);
       }
     }, [screen]);
 
+    /* ===== SPLASH ===== */
     if (screen === 'splash') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('h1', null, 'MINES'),
-        React.createElement('div', { className: 'hint' }, t.loading)
+      return (
+        React.createElement('div', { className: 'screen' },
+          React.createElement('img', {
+            src: 'mines.png',
+            className: 'mines-logo'
+          })
+        )
       );
     }
 
-    if (screen === 'enter') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('div', {
-          className: 'lang',
-          onClick: () => setLang(lang === 'ru' ? 'en' : 'ru')
-        }, lang.toUpperCase()),
-        React.createElement('h2', null, t.enterTitle),
-        React.createElement('input', {
-          value: userId,
-          placeholder: t.placeholder,
-          onChange: e => setUserId(e.target.value.replace(/\D/g, ''))
-        }),
-        React.createElement('button', {
-          disabled: !userId,
-          onClick: () => setScreen('final')
-        }, t.continue)
-      );
-    }
-
-    if (screen === 'final') {
-      return React.createElement('div', { className: 'screen' },
-        React.createElement('h2', null, t.finalTitle),
-        React.createElement('div', { className: 'hint' }, t.finalText),
-        React.createElement('button', {
-          onClick: () => setScreen('signal')
-        }, t.continue)
-      );
-    }
-
-    const cells = Array.from({ length: 25 });
-
+    /* ===== SIGNAL ===== */
     function getSignal() {
-      setOpened([]);
-      const stars = [];
-      while (stars.length < 5) {
+      if (locked) return;
+      setLocked(true);
+      setStars([]);
+
+      const picks = [];
+      while (picks.length < 5) {
         const r = Math.floor(Math.random() * 25);
-        if (!stars.includes(r)) stars.push(r);
+        if (!picks.includes(r)) picks.push(r);
       }
-      stars.forEach((i, idx) => {
+
+      picks.forEach((idx, i) => {
         setTimeout(() => {
-          setOpened(prev => [...prev, i]);
-        }, idx * 300);
+          setStars(prev => [...prev, idx]);
+          if (i === picks.length - 1) setLocked(false);
+        }, i * 420);
       });
     }
 
-    return React.createElement('div', { className: 'screen' },
-      React.createElement('h2', null, t.signal),
-      React.createElement('div', { className: 'grid' },
-        cells.map((_, i) =>
-          React.createElement('div', {
-            key: i,
-            className: 'cell' + (opened.includes(i) ? ' open' : '')
-          }, opened.includes(i) ? StarSVG : null)
-        )
-      ),
-      React.createElement('button', { onClick: getSignal }, t.get)
+    return (
+      React.createElement('div', { className: 'screen' },
+
+        React.createElement('img', {
+          src: '1win.png',
+          className: 'logo-1win'
+        }),
+
+        React.createElement('div', { className: 'board' },
+          React.createElement('img', { src: 'grid.png' }),
+
+          stars.map(i =>
+            React.createElement('img', {
+              key: i,
+              src: 'star.png',
+              className: 'star',
+              style: {
+                left: POSITIONS[i][0] + '%',
+                top: POSITIONS[i][1] + '%',
+                transform: 'translate(-50%, -50%)'
+              }
+            })
+          )
+        ),
+
+        React.createElement('button', {
+          onClick: getSignal,
+          disabled: locked
+        }, locked ? 'Загрузка…' : 'Получить сигнал')
+      )
     );
   }
 
