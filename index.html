@@ -5,7 +5,6 @@
   <title>MINES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- React -->
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 
@@ -16,7 +15,6 @@
       font-family: Arial, sans-serif;
       color: #fff;
     }
-
     .screen {
       min-height: 100vh;
       display: flex;
@@ -26,46 +24,28 @@
       position: relative;
       text-align: center;
     }
-
-    /* SPLASH */
-    .mines-logo {
-      width: 260px;
-    }
-
-    /* SIGNAL */
+    .mines-logo { width: 260px; }
     .logo-1win {
       position: absolute;
       top: 14px;
       right: 14px;
       width: 72px;
-      opacity: 0.95;
     }
-
     .board {
       position: relative;
       width: 300px;
       margin-top: 40px;
     }
-
-    .board img {
-      width: 100%;
-      display: block;
-    }
-
+    .board img { width: 100%; display: block; }
     .star {
       position: absolute;
       width: 36px;
       height: 36px;
       transform: scale(0);
       animation: pop 0.25s ease forwards;
-      pointer-events: none;
       filter: drop-shadow(0 0 12px rgba(255,180,80,0.95));
     }
-
-    @keyframes pop {
-      to { transform: scale(1); }
-    }
-
+    @keyframes pop { to { transform: scale(1); } }
     button {
       margin-top: 28px;
       width: 260px;
@@ -77,11 +57,6 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
   </style>
 </head>
 
@@ -91,7 +66,8 @@
 <script>
   const { useState, useEffect } = React;
 
-  // координаты под сетку 5x5
+  const BASE = '/-/'; // <-- ВАЖНО
+
   const POSITIONS = [
     [10,10],[30,10],[50,10],[70,10],[90,10],
     [10,30],[30,30],[50,30],[70,30],[90,30],
@@ -111,19 +87,12 @@
       }
     }, [screen]);
 
-    // SPLASH SCREEN
     if (screen === 'splash') {
-      return (
-        React.createElement('div', { className: 'screen' },
-          React.createElement('img', {
-            src: './mines.jpg',
-            className: 'mines-logo'
-          })
-        )
+      return React.createElement('div', { className: 'screen' },
+        React.createElement('img', { src: BASE + 'mines.jpg', className: 'mines-logo' })
       );
     }
 
-    // SIGNAL SCREEN
     function getSignal() {
       if (locked) return;
       setLocked(true);
@@ -137,49 +106,36 @@
 
       picks.forEach((idx, i) => {
         setTimeout(() => {
-          setStars(prev => [...prev, idx]);
+          setStars(p => [...p, idx]);
           if (i === picks.length - 1) setLocked(false);
         }, i * 420);
       });
     }
 
-    return (
-      React.createElement('div', { className: 'screen' },
-
-        React.createElement('img', {
-          src: './1win.jpg',
-          className: 'logo-1win'
-        }),
-
-        React.createElement('div', { className: 'board' },
-          React.createElement('img', { src: './grid.jpg' }),
-
-          stars.map(i =>
-            React.createElement('img', {
-              key: i,
-              src: './star.jpg',
-              className: 'star',
-              style: {
-                left: POSITIONS[i][0] + '%',
-                top: POSITIONS[i][1] + '%',
-                transform: 'translate(-50%, -50%)'
-              }
-            })
-          )
-        ),
-
-        React.createElement('button', {
-          onClick: getSignal,
-          disabled: locked
-        }, locked ? 'Загрузка…' : 'Получить сигнал')
+    return React.createElement('div', { className: 'screen' },
+      React.createElement('img', { src: BASE + '1win.jpg', className: 'logo-1win' }),
+      React.createElement('div', { className: 'board' },
+        React.createElement('img', { src: BASE + 'grid.jpg' }),
+        stars.map(i =>
+          React.createElement('img', {
+            key: i,
+            src: BASE + 'star.jpg',
+            className: 'star',
+            style: {
+              left: POSITIONS[i][0] + '%',
+              top: POSITIONS[i][1] + '%',
+              transform: 'translate(-50%, -50%)'
+            }
+          })
+        )
+      ),
+      React.createElement('button', { onClick: getSignal, disabled: locked },
+        locked ? 'Загрузка…' : 'Получить сигнал'
       )
     );
   }
 
-  ReactDOM.render(
-    React.createElement(App),
-    document.getElementById('app')
-  );
+  ReactDOM.render(React.createElement(App), document.getElementById('app'));
 </script>
 </body>
 </html>
