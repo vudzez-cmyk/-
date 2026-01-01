@@ -14,82 +14,80 @@ body{
   color:#fff;
   overflow:hidden;
 }
+:root{ --safe-bottom: env(safe-area-inset-bottom, 0px); }
 
-.app{
+/* SUBSCRIBE */
+.subscribe{
   height:100vh;
   display:flex;
   flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:24px;
+}
+.subscribe button{
+  width:260px;height:46px;
+  border-radius:14px;border:none;
+  background:#ffb300;color:#2b1c00;
+  font-weight:900;margin-top:12px;
+}
+
+/* APP */
+.app{
+  height:100vh;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
 }
 
 /* TOP */
-.top{
-  padding:16px;
-  text-align:center;
-}
-.balance{
-  font-size:34px;
-  font-weight:900;
-}
-.unit{
-  font-size:13px;
-  opacity:.6;
-}
+.top{text-align:center;padding:14px 0 6px}
+.balance{font-size:34px;font-weight:900}
+.unit{font-size:13px;opacity:.6}
 
 /* CENTER */
 .center{
-  flex:1;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  position:relative;
+  gap:18px;
 }
 
 /* ORB */
-.orb-wrap{
-  position:relative;
-}
+.orb-wrap{position:relative}
 .orb-glow{
   position:absolute;
-  inset:-50px;
-  background:radial-gradient(circle, rgba(255,255,255,.35), transparent 65%);
-  filter:blur(22px);
-  animation:pulseGlow 3s infinite ease-in-out;
+  inset:-55px;
+  background:radial-gradient(circle, rgba(255,170,0,.6), transparent 65%);
+  filter:blur(26px);
+  animation:pulse 3s infinite;
 }
-@keyframes pulseGlow{
-  0%{opacity:.4}
-  50%{opacity:.8}
-  100%{opacity:.4}
-}
-
+@keyframes pulse{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
 .orb{
-  width:240px;
-  height:240px;
-  border-radius:50%;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:46px;
-  font-weight:900;
-  cursor:pointer;
-  user-select:none;
-  box-shadow:
-    0 0 60px rgba(255,255,255,.35),
-    inset 0 0 30px rgba(255,255,255,.15);
-  animation:pulseOrb 3s infinite ease-in-out;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#ffd36a,#ff9f00 70%);
+  box-shadow:0 0 70px rgba(255,180,0,.8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;color:#2b1c00;
+  cursor:pointer;user-select:none;
 }
-@keyframes pulseOrb{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.03)}
-  100%{transform:scale(1)}
+.orb:active{transform:scale(.96)}
+
+/* ENERGY */
+.energy{width:80%}
+.energy-bar{
+  height:8px;background:#222;border-radius:6px;overflow:hidden
 }
-.orb:active{ transform:scale(.96) }
+.energy-fill{
+  height:100%;
+  background:linear-gradient(90deg,#ffd36a,#ff9f00);
+  transition:width .4s ease;
+}
 
 /* FLOAT */
 .float{
-  position:absolute;
-  font-weight:700;
-  color:#ffd36a;
+  position:absolute;color:#ffd36a;font-weight:800;
   animation:floatUp .9s ease forwards;
 }
 @keyframes floatUp{
@@ -97,78 +95,60 @@ body{
   to{transform:translateY(-60px);opacity:0}
 }
 
-/* ENERGY */
-.energy{
-  padding:0 16px 12px;
-}
-.energy-bar{
-  height:8px;
-  background:#222;
-  border-radius:6px;
-  overflow:hidden;
-}
-.energy-fill{
-  height:100%;
-  background:linear-gradient(90deg,#ffd36a,#ffb700);
-}
-
 /* MENU */
 .menu{
   display:flex;
   border-top:1px solid #222;
+  padding-bottom:var(--safe-bottom);
 }
 .menu button{
-  flex:1;
-  background:none;
-  border:none;
-  color:#aaa;
-  padding:12px 0;
-  font-size:13px;
-  cursor:pointer;
+  flex:1;background:none;border:none;
+  color:#888;padding:10px 0;
+  font-size:11px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:4px;
 }
-.menu .active{
-  color:#ffd36a;
-  font-weight:700;
-}
+.menu svg{width:22px;height:22px;fill:currentColor}
+.menu .active{color:#ffb300;font-weight:700}
 
 /* SCREENS */
-.screen{
-  display:none;
-  height:100%;
-}
-.screen.active{
-  display:block;
-}
+.screen{display:none}
+.screen.active{display:block}
 
-/* WITHDRAW */
-.withdraw{
-  padding:20px;
-  text-align:center;
+/* PANELS */
+.panel{text-align:center;padding:24px}
+.card{
+  background:rgba(255,255,255,.05);
+  border-radius:14px;
+  padding:14px;
+  margin-top:12px;
 }
 input{
-  width:100%;
-  height:44px;
-  border-radius:12px;
-  border:none;
-  margin-top:10px;
-  padding:0 12px;
+  width:100%;height:44px;
+  border-radius:12px;border:none;
+  padding:0 12px;margin-top:10px;
 }
 .btn{
-  width:100%;
-  height:44px;
-  border-radius:12px;
-  border:none;
-  background:#ffd36a;
-  color:#2b1c00;
-  font-weight:900;
-  margin-top:12px;
+  width:100%;height:44px;
+  border-radius:12px;border:none;
+  background:#ffb300;color:#2b1c00;
+  font-weight:900;margin-top:12px;
 }
 .small{font-size:12px;opacity:.7}
 </style>
 </head>
 
 <body>
-<div class="app">
+
+<!-- SUBSCRIBE -->
+<div class="subscribe" id="subscribe">
+  <h2>Подпишитесь на канал</h2>
+  <div class="small">Для доступа к игре</div>
+  <button onclick="openTG()">Подписаться</button>
+  <button onclick="confirmSub()">Я подписался</button>
+</div>
+
+<div class="app" id="app" style="display:none">
 
   <!-- EARN -->
   <div class="screen active" id="earn">
@@ -176,95 +156,172 @@ input{
       <div class="balance" id="balance">0</div>
       <div class="unit">GOLD</div>
     </div>
-
     <div class="center" id="zone">
       <div class="orb-wrap">
         <div class="orb-glow"></div>
-        <div class="orb" id="orb">△</div>
+        <div class="orb" id="orb">GOLD</div>
       </div>
-    </div>
-
-    <div class="energy">
-      <div class="energy-bar">
-        <div class="energy-fill" id="energyFill"></div>
+      <div class="energy">
+        <div class="energy-bar">
+          <div class="energy-fill" id="energyFill"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- BOOSTS -->
   <div class="screen" id="boosts">
-    <div class="withdraw">
-      <h2>BOOSTS</h2>
-      <div class="small">Скоро здесь будут бусты</div>
+    <div class="panel">
+      <h2>Boosts</h2>
+
+      <div class="card">
+        <b>⚡ BOOST x2</b>
+        <div class="small" id="b2xStatus"></div>
+        <button class="btn" onclick="activateBoost2x()">Активировать</button>
+      </div>
+
+      <div class="card">
+        <b>🤖 AUTO TAP</b>
+        <div class="small" id="autoStatus"></div>
+        <button class="btn" onclick="activateAuto()">Активировать</button>
+      </div>
     </div>
   </div>
 
   <!-- WITHDRAW -->
   <div class="screen" id="withdraw">
-    <div class="withdraw">
-      <h2>Withdraw</h2>
+    <div class="panel">
+      <h2>Вывод</h2>
       <div class="small">100 TAPS = 10 GOLD</div>
-      <input id="gid" placeholder="Game ID">
-      <input id="amt" placeholder="Amount">
-      <button class="btn" onclick="doWithdraw()">Withdraw</button>
+      <input placeholder="Game ID">
+      <input placeholder="Сумма">
+      <button class="btn">Вывести</button>
     </div>
   </div>
 
   <!-- MENU -->
   <div class="menu">
-    <button class="active" onclick="show('earn',this)">Earn</button>
-    <button onclick="show('boosts',this)">Boosts</button>
-    <button onclick="show('withdraw',this)">Withdraw</button>
+    <button class="active" onclick="show('earn',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Earn
+    </button>
+    <button onclick="show('boosts',this)">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15,11 22,12 15,13 12,22 9,13 2,12 9,11"/></svg>Boosts
+    </button>
+    <button onclick="show('withdraw',this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2v14m0 0l-5-5m5 5l5-5"/></svg>Вывод
+    </button>
   </div>
 
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-const MAX_ENERGY = 5500;
+const TG='https://t.me/+s1VSvO5kwp45OTFi';
+const MAX=5500;
 
-/* ===== STATE ===== */
-let gold = +localStorage.getItem('gold') || 0;
-let energy = +localStorage.getItem('energy') || MAX_ENERGY;
+/* BOOST CONFIG */
+const B2X_TIME=30, B2X_CD=120;
+const AUTO_TIME=60, AUTO_CD=300;
 
-/* ===== DOM ===== */
-const balanceEl = document.getElementById('balance');
-const orb = document.getElementById('orb');
-const zone = document.getElementById('zone');
-const energyFill = document.getElementById('energyFill');
+/* STATE */
+let gold=+localStorage.getItem('gold')||0;
+let energy=+localStorage.getItem('energy')||MAX;
+let sub=localStorage.getItem('sub')==='1';
 
-function save(){
-  localStorage.setItem('gold',gold);
-  localStorage.setItem('energy',energy);
-}
+let b2xUntil=+localStorage.getItem('b2xUntil')||0;
+let b2xCd=+localStorage.getItem('b2xCd')||0;
+let autoUntil=+localStorage.getItem('autoUntil')||0;
+let autoCd=+localStorage.getItem('autoCd')||0;
+
+/* DOM */
+const app=document.getElementById('app');
+const subScr=document.getElementById('subscribe');
+const balance=document.getElementById('balance');
+const energyFill=document.getElementById('energyFill');
+const orb=document.getElementById('orb');
+const zone=document.getElementById('zone');
+
+if(sub){subScr.style.display='none';app.style.display='grid'}
+
+function now(){return Math.floor(Date.now()/1000)}
+function isB2x(){return now()<b2xUntil}
+function isAuto(){return now()<autoUntil}
+
 function render(){
-  balanceEl.textContent = gold.toLocaleString();
-  energyFill.style.width = (energy/MAX_ENERGY*100)+'%';
+  balance.textContent=gold.toLocaleString();
+  energyFill.style.width=(energy/MAX*100)+'%';
+
+  const b=document.getElementById('b2xStatus');
+  const a=document.getElementById('autoStatus');
+  if(b){
+    b.textContent=isB2x()?`Активен ${b2xUntil-now()}с`
+      :now()<b2xCd?`КД ${b2xCd-now()}с`:'Доступен';
+  }
+  if(a){
+    a.textContent=isAuto()?`Активен ${autoUntil-now()}с`
+      :now()<autoCd?`КД ${autoCd-now()}с`:'Доступен';
+  }
 }
 render();
 
+/* SUB */
+function openTG(){window.open(TG,'_blank')}
+function confirmSub(){
+  localStorage.setItem('sub','1');
+  subScr.style.display='none';
+  app.style.display='grid';
+}
+
 /* TAP */
-orb.onclick = e=>{
+orb.onclick=e=>{
   if(energy<=0) return;
   energy--;
-  gold++;
-  save(); render();
+  gold+=isB2x()?2:1;
+  localStorage.setItem('gold',gold);
+  localStorage.setItem('energy',energy);
+  render();
 
   const r=zone.getBoundingClientRect();
   const f=document.createElement('div');
-  f.className='float';
-  f.textContent='+1';
+  f.className='float';f.textContent='+'+(isB2x()?2:1);
   f.style.left=(e.clientX-r.left)+'px';
   f.style.top=(e.clientY-r.top)+'px';
   zone.appendChild(f);
   setTimeout(()=>f.remove(),900);
 };
 
-/* ENERGY REGEN */
+/* ENERGY */
 setInterval(()=>{
-  energy=Math.min(MAX_ENERGY,energy+1);
-  save(); render();
+  energy=Math.min(MAX,energy+1);
+  localStorage.setItem('energy',energy);
+  render();
 },1000);
+
+/* AUTO TAP */
+setInterval(()=>{
+  if(isAuto()&&energy>0){
+    energy--;
+    gold+=isB2x()?2:1;
+    localStorage.setItem('gold',gold);
+    localStorage.setItem('energy',energy);
+    render();
+  }
+},2000);
+
+/* BOOST ACTIONS */
+function activateBoost2x(){
+  if(now()<b2xCd) return;
+  b2xUntil=now()+B2X_TIME;
+  b2xCd=b2xUntil+B2X_CD;
+  localStorage.setItem('b2xUntil',b2xUntil);
+  localStorage.setItem('b2xCd',b2xCd);
+}
+function activateAuto(){
+  if(now()<autoCd) return;
+  autoUntil=now()+AUTO_TIME;
+  autoCd=autoUntil+AUTO_CD;
+  localStorage.setItem('autoUntil',autoUntil);
+  localStorage.setItem('autoCd',autoCd);
+}
 
 /* NAV */
 function show(id,btn){
@@ -272,19 +329,6 @@ function show(id,btn){
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-}
-
-/* WITHDRAW */
-function doWithdraw(){
-  const id=document.getElementById('gid').value;
-  const amt=+document.getElementById('amt').value;
-  if(!id||amt<=0||amt>gold){
-    alert('Invalid data');
-    return;
-  }
-  gold-=amt;
-  save(); render();
-  alert('Success');
 }
 </script>
 </body>
