@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>STANDOFF GOLD TAP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- SUBSCRIBE -->
+<div id="subscribe" class="subscribe">
+  <h2>Подпишитесь на канал</h2>
+  <p>Для доступа к игре</p>
+  <button onclick="openChannel()">Подписаться</button>
+  <button onclick="confirmSubscribe()">Я подписался</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="app hidden">
+
+  <!-- EARN -->
+  <div class="screen active" id="earn">
+    <div class="top">
+      <span class="title">STANDOFF GOLD TAP</span>
+      <div class="balance">
+        <span id="gold">0</span>
+        <small>GOLD</small>
+      </div>
+    </div>
+
+    <div class="center" id="tapZone">
+      <div class="orb-wrap">
+        <div class="glow back"></div>
+        <div class="glow front"></div>
+        <div class="orb" id="orb">GOLD</div>
+      </div>
+
+      <div class="energy">
+        <div class="energy-bar">
+          <div class="energy-fill" id="energyFill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOSTS -->
+  <div class="screen" id="boosts">
+    <div class="panel">
+      <h2>Boosts</h2>
+
+      <div class="card">
+        <b>⚡ Boost x2</b>
+        <span id="boost2xStatus"></span>
+        <button onclick="activateBoost2x()">Активировать</button>
+      </div>
+
+      <div class="card">
+        <b>🤖 Auto Tap</b>
+        <span id="autoTapStatus"></span>
+        <button onclick="activateAutoTap()">Активировать</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITHDRAW -->
+  <div class="screen" id="withdraw">
+    <div class="panel">
+      <h2>Вывод</h2>
+      <p>100 TAPS = 10 GOLD</p>
+      <input id="gameId" placeholder="Game ID">
+      <input id="amount" placeholder="Сумма GOLD">
+      <button onclick="withdraw()">Вывести</button>
+      <p id="withdrawStatus"></p>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+    <button onclick="showScreen('earn')" class="active">Earn</button>
+    <button onclick="showScreen('boosts')">Boosts</button>
+    <button onclick="showScreen('withdraw')">Вывод</button>
+  </div>
+
+</div>
+
+<script src="telegram.js"></script>
+<script src="boosts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
