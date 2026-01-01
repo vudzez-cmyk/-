@@ -6,51 +6,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
 <style>
-*{ -webkit-tap-highlight-color:transparent }
-body{
-  margin:0;
-  background:#000;
-  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
-  color:#fff;
-  overflow:hidden;
-}
-:root{ --safe-bottom: env(safe-area-inset-bottom, 0px); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
 
-/* ---------- SUBSCRIBE ---------- */
-.subscribe{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:24px;
-}
-.subscribe button{
-  width:260px;height:46px;
-  border-radius:14px;border:none;
-  background:#ffb300;color:#2b1c00;
-  font-weight:900;margin-top:12px;
-}
-
-/* ---------- APP ---------- */
+/* ===== SAFE HEIGHT ===== */
 .app{
-  height:100vh;
+  height:100dvh;
   display:grid;
   grid-template-rows:auto 1fr auto;
 }
+@supports not (height:100dvh){
+  .app{height:100vh}
+}
 
-/* ---------- TOP ---------- */
+/* ===== TOP ===== */
 .top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:14px 16px 6px;
 }
-.app-title{
-  font-size:14px;
+.title{
+  font-size:13px;
   font-weight:700;
-  letter-spacing:.6px;
   opacity:.85;
 }
 .balance-wrap{
@@ -58,7 +36,7 @@ body{
   flex:1;
 }
 .balance{
-  font-size:32px;
+  font-size:34px;
   font-weight:900;
 }
 .unit{
@@ -66,74 +44,74 @@ body{
   opacity:.6;
 }
 
-/* ---------- CENTER ---------- */
+/* ===== CENTER ===== */
 .center{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:18px;
+  position:relative;
 }
 
-/* ---------- ORB (NOTCOIN STYLE) ---------- */
-.orb-wrap{ position:relative; }
-
-.orb-glow-back{
-  position:absolute;
-  inset:-95px;
-  background:
-    radial-gradient(circle,
-      rgba(255,170,0,.35) 0%,
-      rgba(255,170,0,.18) 35%,
-      rgba(255,170,0,.06) 55%,
-      transparent 70%);
-  filter:blur(42px);
-  animation:glowBreath 3.8s infinite ease-in-out;
+/* ===== ORB ===== */
+.orb-wrap{
+  position:relative;
+  width:240px;
+  height:240px;
 }
 
-.orb-glow-front{
+/* GLOW (НЕ ПЕРЕХВАТЫВАЕТ ТАП) */
+.glow-back,
+.glow-front{
   position:absolute;
-  inset:-45px;
-  background:
-    radial-gradient(circle,
-      rgba(255,200,80,.65) 0%,
-      rgba(255,170,0,.35) 40%,
-      transparent 65%);
+  inset:-80px;
+  pointer-events:none;
+}
+.glow-back{
+  background:radial-gradient(circle,rgba(255,170,0,.35),transparent 65%);
+  filter:blur(45px);
+  animation:breath 3.5s ease-in-out infinite;
+}
+.glow-front{
+  inset:-40px;
+  background:radial-gradient(circle,rgba(255,200,80,.6),transparent 60%);
   filter:blur(22px);
-  animation:glowBreath 3.8s infinite ease-in-out;
+  animation:breath 3.5s ease-in-out infinite;
 }
 
-@keyframes glowBreath{
-  0%{opacity:.55}
+@keyframes breath{
+  0%{opacity:.6}
   50%{opacity:1}
-  100%{opacity:.55}
+  100%{opacity:.6}
 }
 
 .orb{
   width:240px;
   height:240px;
   border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 28%,
-      #ffe29a 0%,
-      #ffbe3b 35%,
-      #ff9f00 70%);
+  background:radial-gradient(circle at 30% 30%,#ffe29a,#ffb300 60%,#ff9800);
   box-shadow:
-    inset 0 0 18px rgba(255,255,255,.25),
-    inset 0 -18px 28px rgba(0,0,0,.25);
+    inset 0 0 20px rgba(255,255,255,.25),
+    inset 0 -20px 30px rgba(0,0,0,.25),
+    0 0 70px rgba(255,170,0,.9);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:30px;
+  font-size:32px;
   font-weight:900;
   color:#2b1c00;
   cursor:pointer;
   user-select:none;
+  position:relative;
+  z-index:2;
 }
-.orb:active{ transform:scale(.96); }
+.orb:active{transform:scale(.96)}
 
-/* ---------- ENERGY ---------- */
-.energy{ width:82%; }
+/* ===== ENERGY ===== */
+.energy{
+  width:82%;
+}
 .energy-bar{
   height:7px;
   background:#222;
@@ -143,26 +121,27 @@ body{
 .energy-fill{
   height:100%;
   background:linear-gradient(90deg,#ffd36a,#ff9f00);
-  transition:width .35s ease;
+  transition:width .25s linear;
 }
 
-/* ---------- FLOAT ---------- */
+/* ===== FLOAT ===== */
 .float{
   position:absolute;
   color:#ffd36a;
   font-weight:800;
-  animation:floatUp .9s ease forwards;
+  animation:floatUp .8s ease forwards;
+  pointer-events:none;
 }
 @keyframes floatUp{
   from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-60px);opacity:0}
+  to{transform:translateY(-50px);opacity:0}
 }
 
-/* ---------- MENU ---------- */
+/* ===== MENU ===== */
 .menu{
   display:flex;
   border-top:1px solid #222;
-  padding-bottom:var(--safe-bottom);
+  padding-bottom:env(safe-area-inset-bottom);
 }
 .menu button{
   flex:1;
@@ -179,11 +158,11 @@ body{
 .menu svg{width:22px;height:22px;fill:currentColor}
 .menu .active{color:#ffb300;font-weight:700}
 
-/* ---------- SCREENS ---------- */
-.screen{ display:none; }
-.screen.active{ display:block; }
+/* ===== SCREENS ===== */
+.screen{display:none}
+.screen.active{display:block}
 
-/* ---------- PANELS ---------- */
+/* ===== BOOSTS / WITHDRAW ===== */
 .panel{
   padding:24px;
   text-align:center;
@@ -204,29 +183,18 @@ body{
   font-weight:900;
   margin-top:12px;
 }
-.small{
-  font-size:12px;
-  opacity:.7;
-}
+.small{font-size:12px;opacity:.7}
 </style>
 </head>
 
 <body>
 
-<!-- ---------- SUBSCRIBE ---------- -->
-<div class="subscribe" id="subscribe">
-  <h2>Подпишитесь на канал</h2>
-  <div class="small">Для доступа к игре</div>
-  <button onclick="openTG()">Подписаться</button>
-  <button onclick="confirmSub()">Я подписался</button>
-</div>
+<div class="app">
 
-<div class="app" id="app" style="display:none">
-
-  <!-- ---------- EARN ---------- -->
+  <!-- ===== EARN ===== -->
   <div class="screen active" id="earn">
     <div class="top">
-      <div class="app-title">STANDOFF GOLD TAP</div>
+      <div class="title">STANDOFF GOLD TAP</div>
       <div class="balance-wrap">
         <div class="balance" id="balance">0</div>
         <div class="unit">GOLD</div>
@@ -236,8 +204,8 @@ body{
 
     <div class="center" id="zone">
       <div class="orb-wrap">
-        <div class="orb-glow-back"></div>
-        <div class="orb-glow-front"></div>
+        <div class="glow-back"></div>
+        <div class="glow-front"></div>
         <div class="orb" id="orb">GOLD</div>
       </div>
 
@@ -249,7 +217,7 @@ body{
     </div>
   </div>
 
-  <!-- ---------- BOOSTS ---------- -->
+  <!-- ===== BOOSTS ===== -->
   <div class="screen" id="boosts">
     <div class="panel">
       <h2>Boosts</h2>
@@ -257,27 +225,26 @@ body{
       <div class="card">
         <b>⚡ BOOST x2</b>
         <div class="small" id="b2xStatus"></div>
-        <button class="btn" onclick="activateBoost2x()">Активировать</button>
+        <button class="btn" onclick="boost2x()">Активировать</button>
       </div>
 
       <div class="card">
         <b>🤖 AUTO TAP</b>
         <div class="small" id="autoStatus"></div>
-        <button class="btn" onclick="activateAuto()">Активировать</button>
+        <button class="btn" onclick="autoTap()">Активировать</button>
       </div>
     </div>
   </div>
 
-  <!-- ---------- WITHDRAW ---------- -->
+  <!-- ===== WITHDRAW ===== -->
   <div class="screen" id="withdraw">
     <div class="panel">
       <h2>Вывод</h2>
       <div class="small">100 TAPS = 10 GOLD</div>
-      <div class="small">Заглушка UI (backend позже)</div>
     </div>
   </div>
 
-  <!-- ---------- MENU ---------- -->
+  <!-- ===== MENU ===== -->
   <div class="menu">
     <button class="active" onclick="show('earn',this)">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Earn
@@ -293,102 +260,75 @@ body{
 </div>
 
 <script>
-const TG='https://t.me/+s1VSvO5kwp45OTFi';
+/* ===== CONFIG ===== */
 const MAX=5500;
-
-/* BOOST CONFIG */
 const B2X_TIME=30, B2X_CD=120;
 const AUTO_TIME=60, AUTO_CD=300;
 
-/* STATE */
+/* ===== STATE ===== */
 let gold=+localStorage.getItem('gold')||0;
 let energy=+localStorage.getItem('energy')||MAX;
-let sub=localStorage.getItem('sub')==='1';
-
 let b2xUntil=+localStorage.getItem('b2xUntil')||0;
 let b2xCd=+localStorage.getItem('b2xCd')||0;
 let autoUntil=+localStorage.getItem('autoUntil')||0;
 let autoCd=+localStorage.getItem('autoCd')||0;
 
-/* DOM */
-const app=document.getElementById('app');
-const subScr=document.getElementById('subscribe');
+/* ===== DOM ===== */
 const balance=document.getElementById('balance');
 const energyFill=document.getElementById('energyFill');
 const orb=document.getElementById('orb');
 const zone=document.getElementById('zone');
 
-if(sub){ subScr.style.display='none'; app.style.display='grid'; }
-
-function now(){ return Math.floor(Date.now()/1000); }
-function isB2x(){ return now()<b2xUntil; }
-function isAuto(){ return now()<autoUntil; }
+function now(){return Math.floor(Date.now()/1000)}
+function isB2x(){return now()<b2xUntil}
+function isAuto(){return now()<autoUntil}
 
 function render(){
   balance.textContent=gold.toLocaleString();
   energyFill.style.width=(energy/MAX*100)+'%';
-
-  const b=document.getElementById('b2xStatus');
-  const a=document.getElementById('autoStatus');
-  if(b){
-    b.textContent=isB2x()?`Активен ${b2xUntil-now()}с`
-      :now()<b2xCd?`КД ${b2xCd-now()}с`:'Доступен';
-  }
-  if(a){
-    a.textContent=isAuto()?`Активен ${autoUntil-now()}с`
-      :now()<autoCd?`КД ${autoCd-now()}с`:'Доступен';
-  }
+  document.getElementById('b2xStatus').textContent =
+    isB2x()?`Активен ${b2xUntil-now()}с`:now()<b2xCd?`КД ${b2xCd-now()}с`:'Доступен';
+  document.getElementById('autoStatus').textContent =
+    isAuto()?`Активен ${autoUntil-now()}с`:now()<autoCd?`КД ${autoCd-now()}с`:'Доступен';
 }
 render();
 
-/* TELEGRAM HAPTIC */
+/* ===== HAPTIC ===== */
 function haptic(){
-  try{
-    if(window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback){
-      Telegram.WebApp.HapticFeedback.impactOccurred('light');
-    }
-  }catch(e){}
+  if(window.Telegram?.WebApp?.HapticFeedback){
+    Telegram.WebApp.HapticFeedback.impactOccurred('light');
+  }
 }
 
-/* SUB */
-function openTG(){ window.open(TG,'_blank'); }
-function confirmSub(){
-  localStorage.setItem('sub','1');
-  subScr.style.display='none';
-  app.style.display='grid';
-}
-
-/* TAP */
-orb.onclick=e=>{
+/* ===== TAP ===== */
+orb.addEventListener('click',e=>{
   if(energy<=0) return;
   energy--;
   gold+=isB2x()?2:1;
-
   localStorage.setItem('gold',gold);
   localStorage.setItem('energy',energy);
   render();
   haptic();
 
-  const r=zone.getBoundingClientRect();
   const f=document.createElement('div');
   f.className='float';
   f.textContent='+'+(isB2x()?2:1);
-  f.style.left=(e.clientX-r.left)+'px';
-  f.style.top=(e.clientY-r.top)+'px';
+  f.style.left=e.offsetX+'px';
+  f.style.top=e.offsetY+'px';
   zone.appendChild(f);
-  setTimeout(()=>f.remove(),900);
-};
+  setTimeout(()=>f.remove(),800);
+});
 
-/* ENERGY REGEN */
+/* ===== ENERGY REGEN ===== */
 setInterval(()=>{
   energy=Math.min(MAX,energy+1);
   localStorage.setItem('energy',energy);
   render();
 },1000);
 
-/* AUTO TAP */
+/* ===== AUTO TAP ===== */
 setInterval(()=>{
-  if(isAuto() && energy>0){
+  if(isAuto()&&energy>0){
     energy--;
     gold+=isB2x()?2:1;
     localStorage.setItem('gold',gold);
@@ -397,15 +337,15 @@ setInterval(()=>{
   }
 },2000);
 
-/* BOOST ACTIONS */
-function activateBoost2x(){
+/* ===== BOOSTS ===== */
+function boost2x(){
   if(now()<b2xCd) return;
   b2xUntil=now()+B2X_TIME;
   b2xCd=b2xUntil+B2X_CD;
   localStorage.setItem('b2xUntil',b2xUntil);
   localStorage.setItem('b2xCd',b2xCd);
 }
-function activateAuto(){
+function autoTap(){
   if(now()<autoCd) return;
   autoUntil=now()+AUTO_TIME;
   autoCd=autoUntil+AUTO_CD;
@@ -413,7 +353,7 @@ function activateAuto(){
   localStorage.setItem('autoCd',autoCd);
 }
 
-/* NAV */
+/* ===== NAV ===== */
 function show(id,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -421,5 +361,6 @@ function show(id,btn){
   btn.classList.add('active');
 }
 </script>
+
 </body>
 </html>
